@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mih.webauthn.config.WebauthnConfigurer;
 import com.mih.webauthn.repository.AppCredentialsRepository;
 import com.mih.webauthn.repository.AppUserRepository;
-import com.mih.webauthn.service.CredentialRepositoryService;
+import com.mih.webauthn.service.CredentialService;
 import com.yubico.webauthn.RelyingParty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -28,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     AppCredentialsRepository credentialRepository;
     @Autowired
-    CredentialRepositoryService credentialRepositoryService;
+    CredentialService credentialService;
     @Autowired
     RelyingParty relyingParty;
     @Autowired
@@ -54,7 +56,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling(customizer -> customizer
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .apply(new WebauthnConfigurer(appUserRepository, credentialRepository, credentialRepositoryService, relyingParty, mapper));
+                .apply(
+                        new WebauthnConfigurer(appUserRepository, credentialRepository,
+                                                credentialService, relyingParty, mapper)
+                .successHandler(u -> {
+
+                    AppUserDetail userDetail = new AppUserDetail(u,
+                            new SimpleGrantedAuthority("USER"));
+                    AppUserAuthentication auth = new AppUserAuthentication(userDetail);
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }));
     }
 
     @Bean

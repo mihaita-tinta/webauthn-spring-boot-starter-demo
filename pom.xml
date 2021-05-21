@@ -8,7 +8,7 @@
 		<version>2.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.mih.webauthn</groupId>
+	<groupId>com.mih.webauthn.demo</groupId>
 	<artifactId>webauthn-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>webauthn-demo</name>
@@ -17,11 +17,11 @@
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
-<!--		<dependency>-->
-<!--			<groupId>com.mih.webauthn</groupId>-->
-<!--			<artifactId>spring-boot-starter-webauthn</artifactId>-->
-<!--			<version>0.0.1-SNAPSHOT</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.mih.webauthn</groupId>
+			<artifactId>spring-boot-starter-webauthn</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
