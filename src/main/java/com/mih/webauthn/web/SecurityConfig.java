@@ -1,6 +1,7 @@
 package com.mih.webauthn.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mih.webauthn.EnableWebAuthn;
 import com.mih.webauthn.config.WebauthnConfigurer;
 import com.mih.webauthn.repository.AppCredentialsRepository;
 import com.mih.webauthn.repository.AppUserRepository;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 
 @Configuration
 @EnableWebSecurity
+@EnableWebAuthn
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
