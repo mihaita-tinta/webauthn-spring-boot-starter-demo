@@ -9,16 +9,12 @@ import com.yubico.webauthn.CredentialRepository;
 import com.yubico.webauthn.RegisteredCredential;
 import com.yubico.webauthn.data.ByteArray;
 import com.yubico.webauthn.data.PublicKeyCredentialDescriptor;
-import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
-@Service
 public class CredentialRepositoryService implements CredentialRepository {
 
     private final AppCredentialsRepository credentialsRepository;
@@ -29,41 +25,44 @@ public class CredentialRepositoryService implements CredentialRepository {
         this.appUserRepository = appUserRepository;
     }
 
-    public Mono<AppCredentials> addCredential(long userId, byte[] credentialId, byte[] publicKeyCose,
-                                              long counter) {
+    public AppCredentials addCredential(long userId, byte[] credentialId, byte[] publicKeyCose,
+                                        long counter) {
 
         return credentialsRepository.save(new AppCredentials(credentialId, userId, counter, publicKeyCose));
     }
 
     public AppCredentials updateSignatureCount(AssertionResult result) {
-        System.out.println("JCR: updateSignatureCount: " + result.getUserHandle());
+        System.out.println("updateSignatureCount: " + result.getUserHandle());
 
         long appUserId = BytesUtil.bytesToLong(result.getUserHandle().getBytes());
         byte[] credentialId = result.getCredentialId().getBytes();
 
-        return credentialsRepository.findByCredentialIdAndAppUserId(credentialId, appUserId)
-                .doOnNext(credential -> credential.setCount(result.getSignatureCount()))
-                .flatMap(credentialsRepository :: save)
-                .block();
+        AppCredentials appCredentials = credentialsRepository.findByCredentialIdAndAppUserId(credentialId, appUserId)
+                .map(credential -> {
+                    credential.setCount(result.getSignatureCount());
+                    return credential;
+                })
+                .orElseThrow();
+        return credentialsRepository.save(appCredentials);
     }
 
     @Override
     public Set<PublicKeyCredentialDescriptor> getCredentialIdsForUsername(String username) {
 
         return appUserRepository.findByUsername(username)
-                .flatMapMany(user -> credentialsRepository.findAllByAppUserId(user.getId())
+                .map(user -> credentialsRepository.findAllByAppUserId(user.getId())
+                        .stream()
                         .map(credential -> PublicKeyCredentialDescriptor.builder()
-                                .id(new ByteArray(credential.getCredentialId())).build()))
-                .collect(Collectors.toSet())
-                .block();
+                                .id(new ByteArray(credential.getCredentialId())).build())
+                        .collect(Collectors.toSet())
+                ).orElseThrow();
     }
 
     @Override
     public Optional<ByteArray> getUserHandleForUsername(String username) {
         return appUserRepository.findByUsername(username)
                 .map(user -> Optional.of(new ByteArray(BytesUtil.longToBytes(user.getId()))))
-                .defaultIfEmpty(Optional.empty())
-                .block();
+                .orElse(Optional.empty());
     }
 
     @Override
@@ -80,26 +79,25 @@ public class CredentialRepositoryService implements CredentialRepository {
         long id = BytesUtil.bytesToLong(userHandle.getBytes());
 
         return appUserRepository.findById(id)
-                .flatMap(user -> credentialsRepository.findByCredentialIdAndAppUserId(credentialId.getBytes(), id))
-                .map(credential -> Optional.of(RegisteredCredential.builder()
-                        .credentialId(new ByteArray(credential.getCredentialId()))
-                        .userHandle(userHandle)
-                        .publicKeyCose(new ByteArray(credential.getPublicKeyCose()))
-                        .signatureCount(credential.getCount()).build()))
-                .defaultIfEmpty(Optional.empty())
-                .block();
+                .map(user -> credentialsRepository.findByCredentialIdAndAppUserId(credentialId.getBytes(), id)
+                        .map(credential -> RegisteredCredential.builder()
+                                .credentialId(new ByteArray(credential.getCredentialId()))
+                                .userHandle(userHandle)
+                                .publicKeyCose(new ByteArray(credential.getPublicKeyCose()))
+                                .signatureCount(credential.getCount()).build()))
+                        .orElse(Optional.empty());
     }
 
     @Override
     public Set<RegisteredCredential> lookupAll(ByteArray credentialId) {
 
         return credentialsRepository.findByCredentialId(credentialId.getBytes())
+                .stream()
                 .map(credential -> RegisteredCredential.builder()
                         .credentialId(new ByteArray(credential.getCredentialId()))
-                        .userHandle( new ByteArray(BytesUtil.longToBytes(credential.getAppUserId())))
+                        .userHandle(new ByteArray(BytesUtil.longToBytes(credential.getAppUserId())))
                         .publicKeyCose(new ByteArray(credential.getPublicKeyCose()))
                         .signatureCount(credential.getCount()).build())
-                .collect(Collectors.toSet())
-                .block();
+                .collect(Collectors.toSet());
     }
 }

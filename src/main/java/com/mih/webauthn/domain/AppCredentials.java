@@ -1,6 +1,14 @@
 package com.mih.webauthn.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class AppCredentials {
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private byte[] credentialId;
     private Long appUserId;
@@ -13,6 +21,10 @@ public class AppCredentials {
         this.appUserId = appUserId;
         this.count = count;
         this.publicKeyCose = publicKeyCose;
+    }
+
+    public AppCredentials() {
+
     }
 
     public void setId(Long id) {

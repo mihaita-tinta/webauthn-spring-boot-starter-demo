@@ -2,14 +2,19 @@ package com.mih.webauthn.repository;
 
 import com.mih.webauthn.domain.AppCredentials;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface AppCredentialsRepository extends ReactiveCrudRepository<AppCredentials, Long> {
+import java.util.List;
+import java.util.Optional;
 
-    Flux<AppCredentials> findAllByAppUserId(Long userId);
+public interface AppCredentialsRepository extends CrudRepository<AppCredentials, Long> {
 
-    Mono<AppCredentials> findByCredentialIdAndAppUserId(byte[] credentialId, Long userId);
-    Flux<AppCredentials> findByCredentialId(byte[] credentialId);
+    List<AppCredentials> findAllByAppUserId(Long userId);
+
+    Optional<AppCredentials> findByCredentialIdAndAppUserId(byte[] credentialId, Long userId);
+
+    List<AppCredentials> findByCredentialId(byte[] credentialId);
+
+    @Transactional
+    void deleteByAppUserId(Long appUserId);
 }
