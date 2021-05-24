@@ -1,4 +1,4 @@
-package com.mih.webauthn;
+package com.mih.webauthn.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

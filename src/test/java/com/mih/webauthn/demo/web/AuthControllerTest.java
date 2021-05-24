@@ -1,9 +1,9 @@
-package com.mih.webauthn.web;
+package com.mih.webauthn.demo.web;
 
 import com.mih.webauthn.BytesUtil;
-import com.mih.webauthn.domain.AppUser;
-import com.mih.webauthn.repository.AppCredentialsRepository;
-import com.mih.webauthn.repository.AppUserRepository;
+import com.mih.webauthn.domain.WebAuthnCredentialsRepository;
+import com.mih.webauthn.domain.WebAuthnUser;
+import com.mih.webauthn.domain.WebAuthnUserRepository;
 import com.yubico.webauthn.RelyingParty;
 import com.yubico.webauthn.StartRegistrationOptions;
 import com.yubico.webauthn.data.ByteArray;
@@ -19,7 +19,6 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest
@@ -29,13 +28,13 @@ class AuthControllerTest {
     @Autowired
     RelyingParty relyingParty;
     @Autowired
-    AppCredentialsRepository credentialsRepository;
+    WebAuthnCredentialsRepository credentialsRepository;
     @Autowired
-    AppUserRepository appUserRepository;
+    WebAuthnUserRepository appUserRepository;
 
     @Test
     public void testGetChallenge() {
-        AppUser user = new AppUser();
+        WebAuthnUser user = new WebAuthnUser();
         user.setUsername("test");
         appUserRepository.save(user);
 

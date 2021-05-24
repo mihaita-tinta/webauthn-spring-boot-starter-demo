@@ -1,4 +1,4 @@
-package com.mih.webauthn;
+package com.mih.webauthn.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

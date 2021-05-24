@@ -1,4 +1,4 @@
-package com.mih.webauthn.web;
+package com.mih.webauthn.demo;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;

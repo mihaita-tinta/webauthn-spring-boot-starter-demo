@@ -1,4 +1,4 @@
-package com.mih.webauthn.web;
+package com.mih.webauthn.demo;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
