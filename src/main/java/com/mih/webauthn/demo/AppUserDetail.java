@@ -7,24 +7,24 @@ import java.util.Set;
 
 public class AppUserDetail {
 
-    private final Long appUserId;
-
-    private final String username;
+    private final WebAuthnUser user;
 
     private final Set<GrantedAuthority> authorities;
 
     public AppUserDetail(WebAuthnUser user, GrantedAuthority authority) {
-        this.appUserId = user.getId();
-        this.username = user.getUsername();
+        this.user = user;
         this.authorities = Set.of(authority);
     }
+    public WebAuthnUser getWebAuthnUser() {
+        return user;
+    };
 
     public Long getAppUserId() {
-        return this.appUserId;
+        return this.user.getId();
     }
 
     public String getUsername() {
-        return this.username;
+        return this.user.getUsername();
     }
 
     public Set<GrantedAuthority> getAuthorities() {

@@ -18,9 +18,9 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.mih.webauthn</groupId>
+			<groupId>io.github.mihaita-tinta</groupId>
 			<artifactId>spring-boot-starter-webauthn</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -66,11 +66,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

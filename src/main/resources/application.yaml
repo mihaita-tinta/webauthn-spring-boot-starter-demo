@@ -1,6 +1,7 @@
 logging:
   level:
     org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
     org.springframework.boot.autoconfigure.h2: DEBUG
 spring:
   jackson:

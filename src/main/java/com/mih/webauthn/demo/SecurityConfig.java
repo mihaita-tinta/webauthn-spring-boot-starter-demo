@@ -49,15 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling(customizer -> customizer
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .apply(
-                        new WebauthnConfigurer()
-                                .successHandler(u -> {
-
-                                    AppUserDetail userDetail = new AppUserDetail(u,
-                                            new SimpleGrantedAuthority("USER"));
-                                    AppUserAuthentication auth = new AppUserAuthentication(userDetail);
-                                    SecurityContextHolder.getContext().setAuthentication(auth);
-                                }));
+                .apply(new WebauthnConfigurer());
     }
 
     @Bean
