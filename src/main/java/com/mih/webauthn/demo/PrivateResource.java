@@ -16,6 +16,6 @@ public class PrivateResource {
     public String secretMessage(@AuthenticationPrincipal WebAuthnUser user) {
         log.info("user id:  " + user.getId());
         log.info("username: " + user.getUsername());
-        return "a secret message";
+        return "a secret message for: " + user.getUsername();
     }
 }
