@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.mih.webauthn.demo</groupId>
 	<artifactId>webauthn-demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>webauthn-demo</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>io.github.mihaita-tinta</groupId>
 			<artifactId>spring-boot-starter-webauthn</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -27,9 +28,9 @@ class AuthControllerTest {
 
     @Autowired
     RelyingParty relyingParty;
-    @Autowired
+    @MockBean
     WebAuthnCredentialsRepository credentialsRepository;
-    @Autowired
+    @MockBean
     WebAuthnUserRepository appUserRepository;
 
     @Test

@@ -8,14 +8,16 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 public class PrivateResource {
     private static final Logger log = LoggerFactory.getLogger(PrivateResource.class);
 
-    @GetMapping("/secret")
-    public String secretMessage(@AuthenticationPrincipal WebAuthnUser user) {
+    @GetMapping("/me")
+    public Map<String, String> secretMessage(@AuthenticationPrincipal WebAuthnUser user) {
         log.info("user id:  " + user.getId());
         log.info("username: " + user.getUsername());
-        return "a secret message for: " + user.getUsername();
+        return Map.of("username", user.getUsername());
     }
 }
