@@ -38,6 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/users", // TODO remove me
                         "/users/publish", // TODO remove me
 
+                        "/socket",
+                        "/client.js",
+                        "/ws.html",
                         "/error", "/h2-console/**",
                         "/svg",
                         "/36.b8e9f171696427e4761e.js",
