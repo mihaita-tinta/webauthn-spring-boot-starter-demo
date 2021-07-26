@@ -1,6 +1,7 @@
 package com.mih.webauthn.demo.web;
 
 import com.mih.webauthn.BytesUtil;
+import com.mih.webauthn.demo.data.MyUser;
 import com.mih.webauthn.domain.WebAuthnCredentialsRepository;
 import com.mih.webauthn.domain.WebAuthnUser;
 import com.mih.webauthn.domain.WebAuthnUserRepository;
@@ -28,14 +29,14 @@ class AuthControllerTest {
 
     @Autowired
     RelyingParty relyingParty;
-    @MockBean
-    WebAuthnCredentialsRepository credentialsRepository;
-    @MockBean
+//    @MockBean
+//    WebAuthnCredentialsRepository credentialsRepository;
+    @Autowired
     WebAuthnUserRepository appUserRepository;
 
     @Test
     public void testGetChallenge() {
-        WebAuthnUser user = new WebAuthnUser();
+        WebAuthnUser user = new MyUser();
         user.setUsername("test");
         appUserRepository.save(user);
 
