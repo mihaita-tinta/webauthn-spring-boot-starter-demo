@@ -2,6 +2,7 @@ package com.mih.webauthn.demo.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mih.webauthn.WebAuthnProperties;
+import com.mih.webauthn.demo.RandomCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -17,10 +18,12 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     WebAuthnProperties properties;
     @Autowired
     ObjectMapper mapper;
+    @Autowired
+    RandomCodeService codeService;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new SocketHandler(mapper), "/socket")
+        registry.addHandler(new SocketHandler(mapper, codeService), "/socket")
                 .addInterceptors(new HttpSessionHandshakeInterceptor())
                 .setAllowedOrigins(properties.getRelyingPartyOrigins().toArray(new String[]{}));
     }

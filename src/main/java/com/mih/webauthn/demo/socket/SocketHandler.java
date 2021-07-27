@@ -1,6 +1,7 @@
 package com.mih.webauthn.demo.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mih.webauthn.demo.RandomCodeService;
 import com.mih.webauthn.domain.WebAuthnUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +25,14 @@ public class SocketHandler extends TextWebSocketHandler {
     private static final SecureRandom random = new SecureRandom();
 
     private final ObjectMapper mapper;
+    private final RandomCodeService codeService;
 
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     Map<String, List<WebSocketSession>> rooms = new ConcurrentHashMap<>();
 
-    public SocketHandler(ObjectMapper mapper) {
+    public SocketHandler(ObjectMapper mapper, RandomCodeService codeService) {
         this.mapper = mapper;
+        this.codeService = codeService;
     }
 
     @Override
@@ -95,7 +98,7 @@ public class SocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 //        Principal principal = session.getPrincipal();
 //        if (principal == null) {
-        String code = "code-" + random.nextInt(100);
+        String code = codeService.nextString();
         session.sendMessage(new TextMessage("{\"code\": \"" + code + "\"}"));
         List<WebSocketSession> list = new ArrayList<>();
         list.add(session);

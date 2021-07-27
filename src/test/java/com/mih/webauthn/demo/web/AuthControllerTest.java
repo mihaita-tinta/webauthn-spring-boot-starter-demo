@@ -1,8 +1,7 @@
 package com.mih.webauthn.demo.web;
 
 import com.mih.webauthn.BytesUtil;
-import com.mih.webauthn.demo.data.MyUser;
-import com.mih.webauthn.domain.WebAuthnCredentialsRepository;
+import com.mih.webauthn.domain.WebAuthnDefaultUser;
 import com.mih.webauthn.domain.WebAuthnUser;
 import com.mih.webauthn.domain.WebAuthnUserRepository;
 import com.yubico.webauthn.RelyingParty;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -29,14 +27,14 @@ class AuthControllerTest {
 
     @Autowired
     RelyingParty relyingParty;
-//    @MockBean
+    //    @MockBean
 //    WebAuthnCredentialsRepository credentialsRepository;
     @Autowired
     WebAuthnUserRepository appUserRepository;
 
     @Test
     public void testGetChallenge() {
-        WebAuthnUser user = new MyUser();
+        WebAuthnUser user = new WebAuthnDefaultUser();
         user.setUsername("test");
         appUserRepository.save(user);
 
