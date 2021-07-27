@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SocketHandler extends TextWebSocketHandler {
     private static final Logger log = LoggerFactory.getLogger(SocketHandler.class);
@@ -27,7 +26,6 @@ public class SocketHandler extends TextWebSocketHandler {
     private final ObjectMapper mapper;
     private final RandomCodeService codeService;
 
-    List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     Map<String, List<WebSocketSession>> rooms = new ConcurrentHashMap<>();
 
     public SocketHandler(ObjectMapper mapper, RandomCodeService codeService) {
@@ -42,8 +40,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
         sendMessage(session, message, rooms.get(session.getAttributes().get("my-code")));
 
-
-       Optional.ofNullable((String) session.getAttributes().get("code"))
+        Optional.ofNullable((String) session.getAttributes().get("code"))
                 .map(existingSessionCode -> {
                     log.debug("handleTextMessage - existingSessionCode: {}, payload: {}", existingSessionCode, message.getPayload());
                     List<WebSocketSession> list = rooms.get(existingSessionCode);
@@ -58,7 +55,7 @@ public class SocketHandler extends TextWebSocketHandler {
                             rooms.get(room.getCode()).add(session);
                         }
                         UsernamePasswordAuthenticationToken t = (UsernamePasswordAuthenticationToken) session.getPrincipal();
-                        String payload = "{\"user\": \"" + ((WebAuthnUser)t.getPrincipal()).getUsername() + "\"}";
+                        String payload = "{\"user\": \"" + ((WebAuthnUser) t.getPrincipal()).getUsername() + "\"}";
                         log.debug("handleTextMessage - new code: {}, payload: {}, new payload: ", room.getCode(), message.getPayload(), payload);
                         sendMessage(session, new TextMessage(payload), rooms.get(room.getCode()));
 
@@ -69,19 +66,11 @@ public class SocketHandler extends TextWebSocketHandler {
                     }
                 });
 
-
-        if (principal == null) {
-
-        }
-
-//        for (WebSocketSession webSocketSession : sessions) {
-//            if (webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
-//                webSocketSession.sendMessage(message);
-//            }
-//        }
     }
 
     private void sendMessage(WebSocketSession session, TextMessage message, List<WebSocketSession> list) {
+
+        List<WebSocketSession> unavailable = new ArrayList<>();
         list
                 .forEach(d -> {
                     try {
@@ -90,8 +79,15 @@ public class SocketHandler extends TextWebSocketHandler {
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
+                        if (!d.isOpen()) {
+                            unavailable.add(session);
+                        }
                     }
                 });
+        if (!unavailable.isEmpty()) {
+            log.info("sendMessage - removing {} unavailable sessions", unavailable.size());
+            list.removeAll(unavailable);
+        }
     }
 
     @Override
@@ -106,6 +102,5 @@ public class SocketHandler extends TextWebSocketHandler {
 //        session.getAttributes().put("principal", principal);
         rooms.put(code, list);
 //        }
-        sessions.add(session);
     }
 }
