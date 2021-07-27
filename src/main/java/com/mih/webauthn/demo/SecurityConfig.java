@@ -38,7 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/users", // TODO remove me
                         "/users/publish", // TODO remove me
 
-                        "/socket",
                         "/client.js",
                         "/ws.html",
                         "/error", "/h2-console/**",
@@ -121,6 +120,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     customizer.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
                     customizer.deleteCookies("JSESSIONID");
                 })
+                .authorizeRequests()
+                .antMatchers("/socket")
+                .access("isAuthenticated() or isAnonymous()")
+                .and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()

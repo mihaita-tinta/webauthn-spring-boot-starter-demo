@@ -1,4 +1,5 @@
 //connecting to our signaling server
+// var conn = new WebSocket('ws://localhost:8080/socket');
 var conn = new WebSocket('wss://auth.marv.ro/api/socket');
 
 conn.onopen = function() {
@@ -9,6 +10,10 @@ conn.onopen = function() {
 conn.onmessage = function(msg) {
     console.log("Got message", msg.data);
     var content = JSON.parse(msg.data);
+    if (!content) {
+        return;
+    }
+
     var data = content.data;
     switch (content.event) {
         // when somebody wants to call us
@@ -36,9 +41,11 @@ var dataChannel;
 var input = document.getElementById("messageInput");
 
 function initialize() {
-    var configuration = null;
+    const servers = {
+        iceServers: [{ urls: ["stun:stun.services.mozilla.com", "stun:stun.l.google.com:19302"] }],
+    };
 
-    peerConnection = new RTCPeerConnection(configuration);
+    peerConnection = new RTCPeerConnection(servers);
 
     // Setup ice handling
     peerConnection.onicecandidate = function(event) {
@@ -113,5 +120,10 @@ function handleAnswer(answer) {
 
 function sendMessage() {
     dataChannel.send(input.value);
+    input.value = "";
+}
+
+function sendCode() {
+    conn.send(input.value);
     input.value = "";
 }
