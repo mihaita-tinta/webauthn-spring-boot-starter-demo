@@ -92,15 +92,14 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-//        Principal principal = session.getPrincipal();
-//        if (principal == null) {
-        String code = codeService.nextString();
-        session.sendMessage(new TextMessage("{\"code\": \"" + code + "\"}"));
-        List<WebSocketSession> list = new ArrayList<>();
-        list.add(session);
-        session.getAttributes().put("my-code", code);
-//        session.getAttributes().put("principal", principal);
-        rooms.put(code, list);
-//        }
+        Principal principal = session.getPrincipal();
+        if (principal == null) {
+            String code = codeService.nextString();
+            session.sendMessage(new TextMessage("{\"code\": \"" + code + "\"}"));
+            List<WebSocketSession> list = new ArrayList<>();
+            list.add(session);
+            session.getAttributes().put("my-code", code);
+            rooms.put(code, list);
+        }
     }
 }
