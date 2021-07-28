@@ -1,10 +1,13 @@
 package com.mih.webauthn.demo;
 
+import com.mih.webauthn.config.WebAuthnUsernameAuthenticationToken;
+import com.mih.webauthn.domain.WebAuthnCredentials;
 import com.mih.webauthn.domain.WebAuthnCredentialsRepository;
 import com.mih.webauthn.domain.WebAuthnUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,19 +34,26 @@ public class PrivateResource {
     }
 
     @GetMapping("/devices")
-    public List<Map<String, String>> devices(@AuthenticationPrincipal WebAuthnUser user) {
-        log.info("devices user id:  " + user.getId());
+    public List<Map<String, String>> devices(@AuthenticationPrincipal WebAuthnUsernameAuthenticationToken token) {
+        WebAuthnUser user = (WebAuthnUser) token.getPrincipal();
+        WebAuthnCredentials currentCredentials = token.getCredentials();
+        log.debug("devices for user:  " + user);
         return credentialsRepository
                 .findAllByAppUserId(user.getId())
                 .stream()
                 .map(credentials ->
-                        Map.of("id", Base64.getEncoder().encodeToString(credentials.getCredentialId()),
-                                "userAgent", credentials.getUserAgent()))
+                        Map.of("id", credentials.getId().toString(),
+                                "userAgent", credentials.getUserAgent(),
+                                "currentDevice", "" + currentCredentials.getId().equals(credentials.getId())))
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping("/devices/{deviceId}")
-    public void deleteDevice(@PathVariable String deviceId) {
-        credentialsRepository.deleteById(Base64.getDecoder().decode(deviceId));
+    public void deleteDevice(@AuthenticationPrincipal WebAuthnUser user, @PathVariable Long deviceId) {
+
+        credentialsRepository
+                .findAllByAppUserId(user.getId())
+                .stream();
+        credentialsRepository.deleteById(deviceId);
     }
 }

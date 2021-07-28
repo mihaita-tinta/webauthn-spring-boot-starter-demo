@@ -38,10 +38,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: io.github.mihaita-tinta:spring-boot-starter-webauthn:0.0.4-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-validation:2.4.5" level="project" />
-    <orderEntry type="library" name="Maven: org.glassfish:jakarta.el:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.1.7.Final" level="project" />
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.4.1.Final" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-websocket:2.4.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:5.3.6" level="project" />
@@ -77,11 +75,22 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.4.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:2.4.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.11.4" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:2.4.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.45" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.45" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.3.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.3.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-undertow:2.4.5" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-core:2.2.7.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.4.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-api:3.8.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.common:wildfly-common:1.5.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.client:wildfly-client-config:1.0.1.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jboss.xnio:xnio-nio:3.8.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.threads:jboss-threads:3.1.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-servlet:2.2.7.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.annotation:jboss-annotations-api_1.3_spec:2.0.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-websockets-jsr:2.2.7.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.websocket:jboss-websocket-api_1.1_spec:2.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.servlet:jakarta.servlet-api:4.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.glassfish:jakarta.el:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-configuration-processor:2.4.5" level="project" />
     <orderEntry type="library" name="Maven: com.yubico:webauthn-server-core:1.7.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.augustcellars.cose:cose-java:1.1.0" level="project" />
