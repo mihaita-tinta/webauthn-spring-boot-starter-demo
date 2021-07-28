@@ -38,7 +38,10 @@ public class SocketHandler extends TextWebSocketHandler {
         Principal principal = session.getPrincipal();
         log.debug("handleTextMessage - principal: {}, payload: {}", principal, message.getPayload());
 
-        sendMessage(session, message, rooms.get(session.getAttributes().get("my-code")));
+        String myCode = (String) session.getAttributes().get("my-code");
+        if (myCode != null) {
+            sendMessage(session, message, rooms.get(myCode));
+        }
 
         Optional.ofNullable((String) session.getAttributes().get("code"))
                 .map(existingSessionCode -> {

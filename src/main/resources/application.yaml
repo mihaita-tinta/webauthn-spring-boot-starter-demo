@@ -23,3 +23,7 @@ webauthn:
 #    registrationFinishPath: /registration/finish
 #    assertionStartPath: /assertion/start
 #    assertionFinishPath: /assertion/finish
+management:
+  metrics:
+    enable:
+      jvm: true
