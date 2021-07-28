@@ -1,6 +1,7 @@
 package com.mih.webauthn.demo.web;
 
 import com.mih.webauthn.BytesUtil;
+import com.mih.webauthn.domain.WebAuthnDefaultUser;
 import com.mih.webauthn.domain.WebAuthnUser;
 import com.mih.webauthn.domain.WebAuthnUserRepository;
 import com.yubico.webauthn.RelyingParty;
@@ -33,7 +34,7 @@ class AuthControllerTest {
 
     @Test
     public void testGetChallenge() {
-        WebAuthnUser user = new WebAuthnUser();
+        WebAuthnDefaultUser user = new WebAuthnDefaultUser();
         user.setUsername("test");
         appUserRepository.save(user);
 
