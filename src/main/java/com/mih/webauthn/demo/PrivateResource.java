@@ -64,7 +64,8 @@ public class PrivateResource {
 
         if (credentialsRepository.findAllByAppUserId(user.getId())
                 .isEmpty()) {
-            userRepository.deleteById(deviceId);
+            log.info("deleteDevice: " + user.getUsername() + " has no longer any device. Deleting user too . . .");
+            userRepository.deleteById(user.getId());
         }
     }
 }
