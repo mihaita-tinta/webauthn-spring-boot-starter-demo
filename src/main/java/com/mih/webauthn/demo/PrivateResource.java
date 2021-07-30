@@ -4,6 +4,7 @@ import com.mih.webauthn.config.WebAuthnUsernameAuthenticationToken;
 import com.mih.webauthn.domain.WebAuthnCredentials;
 import com.mih.webauthn.domain.WebAuthnCredentialsRepository;
 import com.mih.webauthn.domain.WebAuthnUser;
+import com.mih.webauthn.domain.WebAuthnUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class PrivateResource {
 
     @Autowired
     WebAuthnCredentialsRepository credentialsRepository;
+    @Autowired
+    WebAuthnUserRepository userRepository;
 
     @GetMapping("/me")
     public Map<String, String> secretMessage(@AuthenticationPrincipal WebAuthnUser user) {
@@ -54,7 +57,14 @@ public class PrivateResource {
 
         credentialsRepository
                 .findAllByAppUserId(user.getId())
-                .stream();
-        credentialsRepository.deleteById(deviceId);
+                .stream()
+                .filter(c -> c.getId().equals(deviceId))
+                .findAny()
+                .ifPresent(c -> credentialsRepository.deleteById(deviceId));
+
+        if (credentialsRepository.findAllByAppUserId(user.getId())
+                .isEmpty()) {
+            userRepository.deleteById(deviceId);
+        }
     }
 }
