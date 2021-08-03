@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>io.github.mihaita-tinta</groupId>
 			<artifactId>spring-boot-starter-webauthn</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.5-RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -34,7 +34,8 @@ public class PrivateResource {
     public Map<String, String> secretMessage(@AuthenticationPrincipal WebAuthnUser user) {
         log.info("user id:  " + user.getId());
         log.info("username: " + user.getUsername());
-        return Map.of("username", user.getUsername());
+        return Map.of("username", user.getUsername(),
+                "id", user.getId().toString());
     }
 
     @GetMapping("/devices")
