@@ -9,4 +9,5 @@ public class WebauthnDemoApplication {
     public static void main(String[] args) {
         SpringApplication.run(WebauthnDemoApplication.class, args);
     }
+
 }

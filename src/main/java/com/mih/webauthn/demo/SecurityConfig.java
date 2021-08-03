@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mih.webauthn.EnableWebAuthn;
 import com.mih.webauthn.config.WebauthnConfigurer;
 import com.yubico.webauthn.RelyingParty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +15,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+
+import javax.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
 @EnableWebAuthn
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Autowired
     RelyingParty relyingParty;
@@ -37,7 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/",
                         "/users", // TODO remove me
                         "/users/publish", // TODO remove me
+                        "/actuator/**",
 
+                        "/client.js",
+                        "/ws.html",
                         "/error", "/h2-console/**",
                         "/svg",
                         "/36.b8e9f171696427e4761e.js",
@@ -119,11 +128,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     customizer.deleteCookies("JSESSIONID");
                 })
                 .authorizeRequests()
+                .antMatchers("/socket")
+                .access("isAuthenticated() or isAnonymous()")
+                .and()
+                .authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .apply(new WebauthnConfigurer()
-                        .defaultLoginSuccessHandler(user -> sseService.broadcastLoggedInUser(user))
+                        .defaultLoginSuccessHandler((user, credentials) -> sseService.broadcastLoggedInUser(user))
                         .registerSuccessHandler(user -> sseService.broadcastNewUser(user))
                 );
     }
@@ -132,6 +145,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public HttpSessionEventPublisher sessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }
+
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
