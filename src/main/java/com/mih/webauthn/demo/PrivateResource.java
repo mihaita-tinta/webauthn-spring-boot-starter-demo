@@ -47,7 +47,7 @@ public class PrivateResource {
                 .findAllByAppUserId(user.getId())
                 .stream()
                 .map(credentials ->
-                        Map.<String, Object>of("id", credentials.getId().toString(),
+                        Map.<String, Object>of("id", credentials.getId(),
                                 "userAgent", credentials.getUserAgent() == null ? "N/A" : credentials.getUserAgent() ,
                                 "currentDevice", currentCredentials.getId().equals(credentials.getId())))
                 .collect(Collectors.toList());
