@@ -39,7 +39,7 @@ public class PrivateResource {
     }
 
     @GetMapping("/devices")
-    public List<Map<String, String>> devices(Authentication token) {
+    public List<Map<String, Object>> devices(Authentication token) {
         WebAuthnUser user = (WebAuthnUser) token.getPrincipal();
         WebAuthnCredentials currentCredentials = (WebAuthnCredentials) token.getCredentials();
         log.debug("devices for user:  " + user);
@@ -47,9 +47,9 @@ public class PrivateResource {
                 .findAllByAppUserId(user.getId())
                 .stream()
                 .map(credentials ->
-                        Map.of("id", credentials.getId().toString(),
+                        Map.<String, Object>of("id", credentials.getId().toString(),
                                 "userAgent", credentials.getUserAgent() == null ? "N/A" : credentials.getUserAgent() ,
-                                "currentDevice", "" + currentCredentials.getId().equals(credentials.getId())))
+                                "currentDevice", currentCredentials.getId().equals(credentials.getId())))
                 .collect(Collectors.toList());
     }
 

@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.Optional.ofNullable;
+
 public class SocketHandler extends TextWebSocketHandler {
     private static final Logger log = LoggerFactory.getLogger(SocketHandler.class);
     private static final SecureRandom random = new SecureRandom();
@@ -36,39 +38,39 @@ public class SocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws InterruptedException, IOException {
         Principal principal = session.getPrincipal();
-        log.debug("handleTextMessage - principal: {}, payload: {}", principal, message.getPayload());
+        log.debug("handleTextMessage - principal: {}, sessionId: {}, payload: {}", principal, session.getId(), message.getPayload());
+        ofNullable(principal)
+                .ifPresentOrElse(p -> ofNullable((String) session.getAttributes().get("code"))
+                        .map(existingSessionCode -> {
+                            log.debug("handleTextMessage - existingSessionCode: {}, payload: {}", existingSessionCode, message.getPayload());
+                            List<WebSocketSession> list = rooms.get(existingSessionCode);
+                            sendMessage(session, message, list);
+                            return existingSessionCode;
+                        })
+                        .orElseGet(() -> {
+                            try {
+                                RoomRequest room = mapper.readValue(message.getPayload(), RoomRequest.class);
+                                session.getAttributes().put("code", room.getCode());
+                                if (rooms.get(room.getCode()).size() < 2) {
+                                    rooms.get(room.getCode()).add(session);
+                                }
+                                UsernamePasswordAuthenticationToken t = (UsernamePasswordAuthenticationToken) session.getPrincipal();
+                                String payload = "{\"user\": \"" + ((WebAuthnUser) t.getPrincipal()).getUsername() + "\"}";
+                                log.debug("handleTextMessage - new code: {}, payload: {}, new payload: ", room.getCode(), message.getPayload(), payload);
+                                sendMessage(session, new TextMessage(payload), rooms.get(room.getCode()));
 
-        String myCode = (String) session.getAttributes().get("my-code");
-        if (myCode != null) {
-            sendMessage(session, message, rooms.get(myCode));
-        }
-
-        Optional.ofNullable((String) session.getAttributes().get("code"))
-                .map(existingSessionCode -> {
-                    log.debug("handleTextMessage - existingSessionCode: {}, payload: {}", existingSessionCode, message.getPayload());
-                    List<WebSocketSession> list = rooms.get(existingSessionCode);
-                    sendMessage(session, message, list);
-                    return existingSessionCode;
-                })
-                .orElseGet(() -> {
-                    try {
-                        RoomRequest room = mapper.readValue(message.getPayload(), RoomRequest.class);
-                        session.getAttributes().put("code", room.getCode());
-                        if (rooms.get(room.getCode()).size() < 2) {
-                            rooms.get(room.getCode()).add(session);
-                        }
-                        UsernamePasswordAuthenticationToken t = (UsernamePasswordAuthenticationToken) session.getPrincipal();
-                        String payload = "{\"user\": \"" + ((WebAuthnUser) t.getPrincipal()).getUsername() + "\"}";
-                        log.debug("handleTextMessage - new code: {}, payload: {}, new payload: ", room.getCode(), message.getPayload(), payload);
-                        sendMessage(session, new TextMessage(payload), rooms.get(room.getCode()));
-
-                        return room.getCode();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
+                                return room.getCode();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        }), () -> {
+                    String myCode = (String) session.getAttributes().get("my-code");
+                    if (myCode != null) {
+                        log.debug("handleTextMessage - sending from sessionId: {} with room: {} message: {}", session.getId(), myCode, message);
+                        sendMessage(session, message, rooms.get(myCode));
                     }
                 });
-
     }
 
     private void sendMessage(WebSocketSession session, TextMessage message, List<WebSocketSession> list) {
@@ -102,6 +104,7 @@ public class SocketHandler extends TextWebSocketHandler {
             List<WebSocketSession> list = new ArrayList<>();
             list.add(session);
             session.getAttributes().put("my-code", code);
+            log.info("afterConnectionEstablished - new unauthenticated session {} with room {}", session.getId(), code);
             rooms.put(code, list);
         }
     }
