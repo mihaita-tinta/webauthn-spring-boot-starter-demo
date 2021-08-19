@@ -8,9 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Service
 public class LogsSseService {
@@ -26,14 +24,13 @@ public class LogsSseService {
 
             try {
                 long startIndex = COUNTER.get();
-                List<String> newLines = Files.lines(file)
+                Files.lines(file)
                         .skip(startIndex)
-                        .collect(Collectors.toList());
-                long endIndex = COUNTER.addAndGet(newLines.size());
+                        .forEach(line ->
+                                template.broadcast(TOPIC, SseEmitter.event()
+                                        .id(String.valueOf(COUNTER.incrementAndGet()))
+                                        .data(line)));
 
-                template.broadcast(TOPIC, SseEmitter.event()
-                        .id(String.format("lines[%d,%d]", startIndex, endIndex))
-                        .data(newLines));
 
             } catch (IOException e) {
                 e.printStackTrace();
