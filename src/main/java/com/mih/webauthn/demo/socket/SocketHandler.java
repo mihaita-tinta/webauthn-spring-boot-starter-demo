@@ -50,15 +50,18 @@ public class SocketHandler extends TextWebSocketHandler {
                         .orElseGet(() -> {
                             try {
                                 RoomRequest room = mapper.readValue(message.getPayload(), RoomRequest.class);
-                                session.getAttributes().put("code", room.getCode());
-                                if (rooms.get(room.getCode()).size() < 2) {
-                                    rooms.get(room.getCode()).add(session);
-                                }
-                                UsernamePasswordAuthenticationToken t = (UsernamePasswordAuthenticationToken) session.getPrincipal();
-                                String payload = "{\"user\": \"" + ((WebAuthnUser) t.getPrincipal()).getUsername() + "\"}";
-                                log.debug("handleTextMessage - new code: {}, payload: {}, new payload: ", room.getCode(), message.getPayload(), payload);
-                                sendMessage(session, new TextMessage(payload), rooms.get(room.getCode()));
 
+                                if (rooms.get(room.getCode()).size() >= 2) {
+                                    sendMessage(session, new TextMessage("{ \"error\": \"Maximum allowed participants to this room was already reached\"}"), rooms.get(room.getCode()));
+                                    session.close();
+                                } else {
+                                    session.getAttributes().put("code", room.getCode());
+                                    rooms.get(room.getCode()).add(session);
+                                    UsernamePasswordAuthenticationToken t = (UsernamePasswordAuthenticationToken) session.getPrincipal();
+                                    String payload = "{\"user\": \"" + ((WebAuthnUser) t.getPrincipal()).getUsername() + "\"}";
+                                    log.debug("handleTextMessage - new code: {}, payload: {}, new payload: ", room.getCode(), message.getPayload(), payload);
+                                    sendMessage(session, new TextMessage(payload), rooms.get(room.getCode()));
+                                }
                                 return room.getCode();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -108,4 +111,5 @@ public class SocketHandler extends TextWebSocketHandler {
             rooms.put(code, list);
         }
     }
+    // TODO afterConnectionClosed should disconnect the other authenticated device if present in the room
 }

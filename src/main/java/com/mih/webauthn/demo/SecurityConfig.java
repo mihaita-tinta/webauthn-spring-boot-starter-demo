@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/users", // TODO remove me
                         "/users/publish", // TODO remove me
                         "/actuator/**",
+                        "/.well-known/assetlinks.json",
 
                         "/client.js",
                         "/ws.html",

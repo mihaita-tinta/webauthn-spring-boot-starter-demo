@@ -1,4 +1,6 @@
 logging:
+  file:
+    path: logs
   level:
     com.mih.webauthn: DEBUG
     org.springframework.security: DEBUG
@@ -17,13 +19,13 @@ webauthn:
   relying-party-name: Example Application
   relying-party-icon: http://localhost:8100/assets/logo.png
   relying-party-origins: http://localhost:8080,http://localhost:4200,http://192.168.0.111:8080
-#  preferred-pubkey-params:
-#    -
-#      alg: ES256
-#      type: PUBLIC_KEY
-#    -
-#      alg: RS256
-#      type: PUBLIC_KEY
+  preferred-pubkey-params:
+    -
+      alg: ES256
+      type: PUBLIC_KEY
+    -
+      alg: RS256
+      type: PUBLIC_KEY
 #  endpoints:
 #    registrationStartPath: /registration/start
 #    registrationAddPath: /registration/add
@@ -34,3 +36,10 @@ management:
   metrics:
     enable:
       jvm: true
+  endpoint:
+    logfile:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: logfile,health,threaddump,mappingss
