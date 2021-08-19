@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,9 +19,8 @@ public class SseTemplate {
     public SseEmitter newSseEmitter(String topic) {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         connections.putIfAbsent(topic, new CopyOnWriteArrayList<>());
-        List<SseEmitter> list = connections.get(topic);
-        list.add(emitter);
-
+        connections.get(topic)
+                .add(emitter);
         return emitter;
     }
 

@@ -23,15 +23,12 @@ public class LogsSseService {
         monitoringFileService.listen(file -> {
 
             try {
-                long startIndex = COUNTER.get();
                 Files.lines(file)
-                        .skip(startIndex)
+                        .skip(COUNTER.get())
                         .forEach(line ->
                                 template.broadcast(TOPIC, SseEmitter.event()
                                         .id(String.valueOf(COUNTER.incrementAndGet()))
                                         .data(line)));
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
