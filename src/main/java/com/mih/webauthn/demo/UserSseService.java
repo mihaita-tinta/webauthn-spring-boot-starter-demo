@@ -25,14 +25,6 @@ public class UserSseService {
     }
 
     public SseEmitter newSseEmitter() {
-
-        SseEmitter sseEmitter = template.newSseEmitter(TOPIC);
-
-//        template.sendMessage(SseEmitter.event()
-//                                        .data(stats)
-//                                        .id("1")
-//                                        .name("welcome"),
-//                            sseEmitter);
         return template.newSseEmitter(TOPIC);
     }
 

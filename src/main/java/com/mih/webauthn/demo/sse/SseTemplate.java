@@ -1,5 +1,6 @@
 package com.mih.webauthn.demo.sse;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -24,6 +25,7 @@ public class SseTemplate {
         return emitter;
     }
 
+    @Async
     public void broadcast(String topic, SseEmitter.SseEventBuilder event) {
 
         Optional.ofNullable(connections.get(topic))
