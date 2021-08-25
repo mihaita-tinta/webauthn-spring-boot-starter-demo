@@ -21,6 +21,9 @@ public class SseController {
     @Autowired
     UserSseService sseService;
 
+    @Autowired
+    ProfanityFilter profanityFilter;
+
     @GetMapping(path = "/users", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter users() {
         return sseService.newSseEmitter();
@@ -38,9 +41,12 @@ public class SseController {
 
     @PutMapping(path = "/feedback")
     public void feedback(@RequestParam String words, @AuthenticationPrincipal WebAuthnUser user) {
-        template.broadcast("feedback", SseEmitter.event()
-                .data(words)
-                .id(user.getUsername()));
+
+        if (profanityFilter.isOk(words)) {
+            template.broadcast("feedback", SseEmitter.event()
+                    .data(words)
+                    .id(user.getUsername()));
+        }
     }
 
 }

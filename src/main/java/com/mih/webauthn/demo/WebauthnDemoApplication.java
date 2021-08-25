@@ -13,7 +13,7 @@ public class WebauthnDemoApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(WebauthnDemoApplication.class, args);
-        context.start();
+//        context.start();
         addCustomAppender(context, (LoggerContext) LoggerFactory.getILoggerFactory());
 
     }
