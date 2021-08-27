@@ -1,5 +1,6 @@
 package com.mih.webauthn.demo;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import com.mih.webauthn.demo.logs.StreamAppender;
@@ -20,8 +21,9 @@ public class WebauthnDemoApplication {
 
     private static void addCustomAppender(ConfigurableApplicationContext context, LoggerContext loggerContext) {
         StreamAppender customAppender = context.getBean(StreamAppender.class);
-        Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
-        rootLogger.addAppender(customAppender);
+        Logger demo = loggerContext.getLogger("com.mih.webauthn");
+        demo.setLevel(Level.DEBUG);
+        demo.addAppender(customAppender);
     }
 
 }

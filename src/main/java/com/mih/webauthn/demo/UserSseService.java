@@ -25,7 +25,10 @@ public class UserSseService {
     }
 
     public SseEmitter newSseEmitter() {
-        return template.newSseEmitter(TOPIC);
+        return template.newSseEmitter(TOPIC, SseEmitter.event()
+                .name("welcome")
+                .data(stats)
+                .id("1"));
     }
 
     public void broadcastLoggedInUser(WebAuthnUser user) {

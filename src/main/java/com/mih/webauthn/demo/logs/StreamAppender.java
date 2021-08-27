@@ -7,6 +7,8 @@ import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.Map;
+
 @Component
 public class StreamAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements SmartLifecycle {
     public static final String TOPIC = "logs";
@@ -19,9 +21,12 @@ public class StreamAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 
     @Override
     protected void append(ILoggingEvent event) {
+        String[] split = event.getLoggerName().split("\\.");
         template.broadcast(TOPIC, SseEmitter.event()
                 .id(event.getThreadName())
-                .data(event.getFormattedMessage()));
+                .name("log")
+                .data(Map.of("message", event.getFormattedMessage(),
+                                "class", split[split.length - 1])));
     }
 
     @Override

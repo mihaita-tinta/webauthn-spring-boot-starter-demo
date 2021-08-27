@@ -6,14 +6,18 @@ import com.mih.webauthn.domain.WebAuthnUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 @RestController
+//@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true")
 public class SseController {
+    private Map<String, Integer> allWords = new ConcurrentHashMap<>();
+    private Map<WebAuthnUser, Integer> userWordCounter = new ConcurrentHashMap<>();
 
     @Autowired
     SseTemplate template;
@@ -36,16 +40,26 @@ public class SseController {
 
     @GetMapping(path = "/feedback", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter feedback() {
-        return template.newSseEmitter("feedback");
+        return template.newSseEmitter("feedback",
+                SseEmitter.event()
+                .data(allWords)
+                .name("feedback"));
     }
 
     @PutMapping(path = "/feedback")
     public void feedback(@RequestParam String words, @AuthenticationPrincipal WebAuthnUser user) {
 
-        if (profanityFilter.isOk(words)) {
-            template.broadcast("feedback", SseEmitter.event()
-                    .data(words)
-                    .id(user.getUsername()));
+        int availableWords = userWordCounter.getOrDefault(user, 5);
+        if ( availableWords > 0) {
+            if (profanityFilter.isOk(words)) {
+                allWords.putIfAbsent(words, 0);
+                allWords.put(words, allWords.compute(words, (key, value) -> ++value));
+                template.broadcast("feedback", SseEmitter.event()
+                        .data(allWords)
+                        .name("feedback"));
+            }
+            availableWords--;
+            userWordCounter.put(user, availableWords);
         }
     }
 
