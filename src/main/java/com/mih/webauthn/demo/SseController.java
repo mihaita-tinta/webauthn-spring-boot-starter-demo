@@ -52,8 +52,8 @@ public class SseController {
         int availableWords = userWordCounter.getOrDefault(user, 5);
         if ( availableWords > 0) {
             if (profanityFilter.isOk(words)) {
-                allWords.putIfAbsent(words, 0);
-                allWords.put(words, allWords.compute(words, (key, value) -> ++value));
+                    allWords.putIfAbsent(words, 0);
+                    allWords.put(words, allWords.compute(words, (key, value) -> ++value));
                 template.broadcast("feedback", SseEmitter.event()
                         .data(allWords)
                         .name("feedback"));

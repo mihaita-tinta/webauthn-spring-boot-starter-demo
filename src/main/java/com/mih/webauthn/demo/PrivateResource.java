@@ -28,9 +28,8 @@ public class PrivateResource {
     WebAuthnUserRepository userRepository;
 
     @GetMapping("/me")
-    public Map<String, String> secretMessage(@AuthenticationPrincipal WebAuthnUser user) {
-        log.info("user id:  " + user.getId());
-        log.info("username: " + user.getUsername());
+    public Map<String, String> me(@AuthenticationPrincipal WebAuthnUser user) {
+        log.info("me - user: {}", user);
         return Map.of("username", user.getUsername(),
                 "id", user.getId().toString());
     }
@@ -39,15 +38,16 @@ public class PrivateResource {
     public List<Map<String, Object>> devices(Authentication token) {
         WebAuthnUser user = (WebAuthnUser) token.getPrincipal();
         WebAuthnCredentials currentCredentials = (WebAuthnCredentials) token.getCredentials();
-        log.debug("devices for user:  " + user);
-        return credentialsRepository
+        List<Map<String, Object>> map = credentialsRepository
                 .findAllByAppUserId(user.getId())
                 .stream()
                 .map(credentials ->
                         Map.<String, Object>of("id", credentials.getId(),
-                                "userAgent", credentials.getUserAgent() == null ? "N/A" : credentials.getUserAgent() ,
+                                "userAgent", credentials.getUserAgent() == null ? "N/A" : credentials.getUserAgent(),
                                 "currentDevice", currentCredentials.getId().equals(credentials.getId())))
                 .collect(Collectors.toList());
+        log.debug("devices - user: {}, devices: {}", user, map);
+        return map;
     }
 
     @DeleteMapping("/devices/{deviceId}")
@@ -62,7 +62,7 @@ public class PrivateResource {
 
         if (credentialsRepository.findAllByAppUserId(user.getId())
                 .isEmpty()) {
-            log.info("deleteDevice: " + user.getUsername() + " has no longer any device. Deleting user too . . .");
+            log.info("deleteDevice - user {} has no longer any device. Deleting user too . . .", user);
             userRepository.deleteById(user.getId());
         }
     }
