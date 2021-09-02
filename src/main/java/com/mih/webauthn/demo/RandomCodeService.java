@@ -10,10 +10,6 @@ import java.util.Random;
 public class RandomCodeService {
     private static final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    private static final String digits = "0123456789";
-
-    private static final String alphanum = upper + digits;
-
     private final Random random;
 
     private final char[] symbols;
@@ -21,7 +17,7 @@ public class RandomCodeService {
 
     public RandomCodeService() {
         this.random = new SecureRandom();
-        this.symbols = alphanum.toCharArray();
+        this.symbols = upper.toCharArray();
     }
 
     public String nextString() {
