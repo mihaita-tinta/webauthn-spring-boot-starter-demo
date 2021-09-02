@@ -6,6 +6,7 @@ import com.mih.webauthn.domain.WebAuthnUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -111,5 +112,10 @@ public class SocketHandler extends TextWebSocketHandler {
             rooms.put(code, list);
         }
     }
-    // TODO afterConnectionClosed should disconnect the other authenticated device if present in the room
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        log.info("afterConnectionClosed - session {}", session.getId());
+        // TODO afterConnectionClosed should disconnect the other authenticated device if present in the room
+    }
 }

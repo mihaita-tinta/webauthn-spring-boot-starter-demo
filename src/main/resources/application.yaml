@@ -19,19 +19,6 @@ webauthn:
   relying-party-name: Example Application
   relying-party-icon: http://localhost:8100/assets/logo.png
   relying-party-origins: http://localhost:8080,http://localhost:4200,http://192.168.0.111:8080
-  preferred-pubkey-params:
-    -
-      alg: ES256
-      type: PUBLIC_KEY
-    -
-      alg: RS256
-      type: PUBLIC_KEY
-  endpoints:
-    registrationStartPath: /api/registration/start
-    registrationAddPath: /api/registration/add
-    registrationFinishPath: /api/registration/finish
-    assertionStartPath: /api/assertion/start
-    assertionFinishPath: /api/assertion/finish
 management:
   metrics:
     enable:
