@@ -1,7 +1,5 @@
 package com.mih.webauthn.demo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yubico.webauthn.RelyingParty;
 import io.github.webauthn.EnableWebAuthn;
 import io.github.webauthn.config.WebAuthnConfigurer;
 import org.slf4j.Logger;
@@ -20,10 +18,6 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
-    @Autowired
-    RelyingParty relyingParty;
-    @Autowired
-    ObjectMapper mapper;
     @Autowired
     AccountRepository accountRepository;
 
