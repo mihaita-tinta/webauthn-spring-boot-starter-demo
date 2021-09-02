@@ -1,18 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>WebAuthn</title>
-  <base href="/">
+  <head>
+    <meta charset="utf-8" />
+    <title>WebAuthn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="module" src="node_modules/web-authn-components/dist/web-authn-login.js"></script>
+    <script type="module" src="node_modules/web-authn-components/dist/web-authn-registration.js"></script>
+  <body>
+    <p>Create an account</p>
+    <web-authn-registration></web-authn-registration>
+    <script type="text/javascript">
 
-  <meta content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-  <meta content="telephone=no" name="format-detection">
-  <meta content="no" name="msapplication-tap-highlight">
-  <link href="assets/favicon.png" rel="icon" type="image/png"/>
-  <meta content="yes" name="apple-mobile-web-app-capable"/>
-  <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
-<link rel="stylesheet" href="styles.4d01d30f558b665d5066.css"></head>
-<body>
-<app-root></app-root>
-<script src="runtime.5b7309a458213e166be8.js" defer></script><script src="polyfills.366a5623aadf5a7905ce.js" defer></script><script src="main.827668b303b1a72014f0.js" defer></script></body>
+      let registrationElement = document.querySelector('web-authn-registration');
+      registrationElement.addEventListener('registration-started', e => {
+        console.log('registration-started - event', e);
+      }, false);
+      registrationElement.addEventListener('registration-created', e => {
+        console.log('registration-created - event', e);
+      }, false);
+      registrationElement.addEventListener('registration-finished', e => {
+        console.log('registration-finished - event', e);
+        window.location.href = '/login.html';
+      }, false);
+      registrationElement.addEventListener('registration-error', e => {
+        console.log('registration-error - event', e);
+      }, false);
+
+    </script>
+
+  </body>
 </html>

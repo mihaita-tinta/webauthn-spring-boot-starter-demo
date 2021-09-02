@@ -28,10 +28,11 @@ public class PrivateResource {
     WebAuthnUserRepository userRepository;
 
     @GetMapping("/me")
-    public Map<String, String> me(@AuthenticationPrincipal WebAuthnUser user) {
+    public Map<String, Object> me(@AuthenticationPrincipal WebAuthnUser user) {
         log.info("me - user: {}", user);
         return Map.of("username", user.getUsername(),
-                "id", user.getId().toString());
+                "id", user.getId().toString(),
+                "credentials", credentialsRepository.findAllByAppUserId(user.getId()));
     }
 
     @GetMapping("/devices")

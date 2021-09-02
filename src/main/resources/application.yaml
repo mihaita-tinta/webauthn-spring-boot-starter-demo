@@ -26,12 +26,12 @@ webauthn:
     -
       alg: RS256
       type: PUBLIC_KEY
-#  endpoints:
-#    registrationStartPath: /registration/start
-#    registrationAddPath: /registration/add
-#    registrationFinishPath: /registration/finish
-#    assertionStartPath: /assertion/start
-#    assertionFinishPath: /assertion/finish
+  endpoints:
+    registrationStartPath: /api/registration/start
+    registrationAddPath: /api/registration/add
+    registrationFinishPath: /api/registration/finish
+    assertionStartPath: /api/assertion/start
+    assertionFinishPath: /api/assertion/finish
 management:
   metrics:
     enable:

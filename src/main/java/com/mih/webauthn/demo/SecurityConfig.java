@@ -45,9 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/logs", // TODO remove me
                         "/users/publish", // TODO remove me
                         "/actuator/**",
-                        "/.well-known/assetlinks.json",
 
                         "/index.html",
+                        "/login.html",
+                        "/new-device.html",
+                        "/node_modules/web-authn-components/dist/**",
+                        "/error",
+
                         "/images",
                         "/.well-known",
                         "/icons",
