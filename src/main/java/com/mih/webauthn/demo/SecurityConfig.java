@@ -59,10 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .defaultLoginSuccessHandler((user, credentials) -> log.info("user logged in: {}", user))
                         .registerSuccessHandler(user -> {
                             log.info("new user registered: {}", user);
-
-                            Account account = new Account();
-                            account.setIban(user.getUsername() + "-iban-" + System.currentTimeMillis());
-                            accountRepository.save(account);
                         })
                 );
     }

@@ -1,11 +1,3 @@
-logging:
-  file:
-    path: logs
-  level:
-    com.mih.webauthn: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.boot.autoconfigure.h2: DEBUG
 spring:
   jackson:
     default-property-inclusion: non_absent
