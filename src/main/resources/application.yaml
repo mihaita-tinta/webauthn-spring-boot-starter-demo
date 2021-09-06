@@ -1,15 +1,16 @@
 spring:
+  resources:
+    static-locations: classpath:/META-INF/resources/webauthn
   jackson:
     default-property-inclusion: non_absent
     serialization:
-     FAIL_ON_EMPTY_BEANS: false
+      FAIL_ON_EMPTY_BEANS: false
   h2:
     console:
       enabled: true
 webauthn:
   relying-party-id: localhost
   relying-party-name: Example Application
-  relying-party-icon: http://localhost:8080/assets/logo.png
   relying-party-origins: http://localhost:8080
   endpoints:
     registrationStartPath: /api/registration/start
