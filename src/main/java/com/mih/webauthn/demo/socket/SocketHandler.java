@@ -2,7 +2,7 @@ package com.mih.webauthn.demo.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mih.webauthn.demo.RandomCodeService;
-import com.mih.webauthn.domain.WebAuthnUser;
+import io.github.webauthn.domain.WebAuthnUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

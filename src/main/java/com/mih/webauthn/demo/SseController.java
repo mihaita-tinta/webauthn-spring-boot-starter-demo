@@ -2,7 +2,7 @@ package com.mih.webauthn.demo;
 
 import com.mih.webauthn.demo.logs.StreamAppender;
 import com.mih.webauthn.demo.sse.SseTemplate;
-import com.mih.webauthn.domain.WebAuthnUser;
+import io.github.webauthn.domain.WebAuthnUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

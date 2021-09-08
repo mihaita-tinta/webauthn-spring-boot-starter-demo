@@ -1,9 +1,9 @@
 package com.mih.webauthn.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mih.webauthn.EnableWebAuthn;
-import com.mih.webauthn.config.WebAuthnConfigurer;
 import com.yubico.webauthn.RelyingParty;
+import io.github.webauthn.EnableWebAuthn;
+import io.github.webauthn.config.WebAuthnConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

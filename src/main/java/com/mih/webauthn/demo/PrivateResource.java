@@ -1,9 +1,9 @@
 package com.mih.webauthn.demo;
 
-import com.mih.webauthn.domain.WebAuthnCredentials;
-import com.mih.webauthn.domain.WebAuthnCredentialsRepository;
-import com.mih.webauthn.domain.WebAuthnUser;
-import com.mih.webauthn.domain.WebAuthnUserRepository;
+import io.github.webauthn.domain.WebAuthnCredentials;
+import io.github.webauthn.domain.WebAuthnCredentialsRepository;
+import io.github.webauthn.domain.WebAuthnUser;
+import io.github.webauthn.domain.WebAuthnUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
