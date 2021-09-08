@@ -3,6 +3,7 @@ logging:
     path: logs
   level:
     com.mih.webauthn: DEBUG
+    io.github.webauthn: DEBUG
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
     org.springframework.boot.autoconfigure.h2: DEBUG
