@@ -25,6 +25,9 @@ public class WebauthnDemoApplication {
         Logger demo = loggerContext.getLogger(WebAuthnFilter.class.getPackageName());
         demo.setLevel(Level.DEBUG);
         demo.addAppender(customAppender);
+        Logger mih = loggerContext.getLogger(WebAuthnFilter.class.getPackageName());
+        mih.setLevel(Level.DEBUG);
+        mih.addAppender(customAppender);
     }
 
 }
