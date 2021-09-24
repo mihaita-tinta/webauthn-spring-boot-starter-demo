@@ -1,33 +1,25 @@
 logging:
-  file:
-    path: logs
   level:
-    com.mih.webauthn: DEBUG
-    io.github.webauthn: DEBUG
     org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.boot.autoconfigure.h2: DEBUG
 spring:
   jackson:
     default-property-inclusion: non_absent
     serialization:
-     FAIL_ON_EMPTY_BEANS: false
+      FAIL_ON_EMPTY_BEANS: false
   h2:
     console:
       enabled: true
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/webauthn
 webauthn:
   relying-party-id: localhost
   relying-party-name: Example Application
-  relying-party-icon: http://localhost:8100/assets/logo.png
-  relying-party-origins: http://localhost:8080,http://localhost:4200,http://192.168.0.111:8080
-management:
-  metrics:
-    enable:
-      jvm: true
-  endpoint:
-    logfile:
-      enabled: true
+  relying-party-icon: http://localhost:8080/assets/logo.png
+  relying-party-origins: http://localhost:8080
   endpoints:
-    web:
-      exposure:
-        include: logfile,health,threaddump,mappingss
+    registrationStartPath: /api/registration/start
+    registrationAddPath: /api/registration/add
+    registrationFinishPath: /api/registration/finish
+    assertionStartPath: /api/assertion/start
+    assertionFinishPath: /api/assertion/finish
