@@ -1,6 +1,6 @@
 package com.mih.webauthn.demo;
 
-import com.mih.webauthn.domain.WebAuthnUser;
+import io.github.webauthn.domain.WebAuthnUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.web.session.HttpSessionDestroyedEvent;

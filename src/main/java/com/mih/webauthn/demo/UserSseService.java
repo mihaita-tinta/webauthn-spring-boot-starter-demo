@@ -1,6 +1,6 @@
 package com.mih.webauthn.demo;
 
-import com.mih.webauthn.domain.WebAuthnUser;
+import io.github.webauthn.domain.WebAuthnUser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
