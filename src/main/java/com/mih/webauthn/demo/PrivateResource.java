@@ -9,10 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,11 @@ public class PrivateResource {
     @Autowired
     WebAuthnUserRepository userRepository;
 
+    @PostMapping("/success-password")
+    public User successPassword(@AuthenticationPrincipal User user) {
+        log.info("successPassword - user: {}", user);
+         return user;
+    }
     @GetMapping("/me")
     public Map<String, Object> me(@AuthenticationPrincipal WebAuthnUser user) {
         log.info("me - user: {}", user);

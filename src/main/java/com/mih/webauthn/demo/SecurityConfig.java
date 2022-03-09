@@ -14,10 +14,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -114,6 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
+                .formLogin(login -> login.successForwardUrl("/success-password") )
                 .apply(new WebAuthnConfigurer()
                         .defaultLoginSuccessHandler((user, credentials) -> sseService.broadcastLoggedInUser(user))
                         .registerSuccessHandler(user -> sseService.broadcastNewUser(user))
@@ -128,6 +132,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager();
+        return new InMemoryUserDetailsManager(Arrays.asList(User.builder().username("user").password("{noop}a").authorities("USER").build()));
     }
 }
