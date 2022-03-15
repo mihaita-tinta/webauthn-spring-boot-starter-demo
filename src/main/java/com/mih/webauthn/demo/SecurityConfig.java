@@ -4,6 +4,7 @@ import com.mih.webauthn.demo.domain.Account;
 import com.mih.webauthn.demo.domain.AccountRepo;
 import io.github.webauthn.EnableWebAuthn;
 import io.github.webauthn.config.WebAuthnConfigurer;
+import io.github.webauthn.domain.DefaultWebAuthnUser;
 import io.github.webauthn.domain.WebAuthnUser;
 import io.github.webauthn.domain.WebAuthnUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     AccountRepo accountRepo;
     @Autowired
-    WebAuthnUserRepository webAuthnUserRepository;
+    WebAuthnUserRepository<WebAuthnUser> webAuthnUserRepository;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
@@ -77,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             }
                             return webAuthnUserRepository.findByUsername(authentication.getName())
                                     .orElseGet(() -> {
-                                        WebAuthnUser newUser = new WebAuthnUser();
+                                        DefaultWebAuthnUser newUser = new DefaultWebAuthnUser();
                                         newUser.setUsername(authentication.getName());
                                         newUser.setEnabled(true);
                                         return webAuthnUserRepository.save(newUser);
