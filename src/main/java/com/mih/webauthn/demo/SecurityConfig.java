@@ -5,7 +5,7 @@ import com.mih.webauthn.demo.domain.AccountRepo;
 import io.github.webauthn.EnableWebAuthn;
 import io.github.webauthn.config.WebAuthnConfigurer;
 import io.github.webauthn.domain.DefaultWebAuthnUser;
-import io.github.webauthn.domain.WebAuthnUser;
+import io.github.webauthn.domain.WebAuthnUserInMemoryRepository;
 import io.github.webauthn.domain.WebAuthnUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -32,8 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     MyUserDetailsService userDetailsService;
     @Autowired
     AccountRepo accountRepo;
-    @Autowired
-    WebAuthnUserRepository<WebAuthnUser> webAuthnUserRepository;
+//    @Autowired
+//    WebAuthnUserRepository<WebAuthnUser> webAuthnUserRepository;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -76,14 +76,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             if (authentication == null) {
                                 return null;
                             }
-                            return webAuthnUserRepository.findByUsername(authentication.getName())
+                            return webAuthnUserRepository().findByUsername(authentication.getName())
                                     .orElseGet(() -> {
                                         DefaultWebAuthnUser newUser = new DefaultWebAuthnUser();
                                         newUser.setUsername(authentication.getName());
                                         newUser.setEnabled(true);
-                                        return webAuthnUserRepository.save(newUser);
+                                        return webAuthnUserRepository().save(newUser);
                                     });
                         })
                 );
+    }
+
+    @Bean
+    public WebAuthnUserRepository<DefaultWebAuthnUser> webAuthnUserRepository() {
+        return new WebAuthnUserInMemoryRepository();
     }
 }

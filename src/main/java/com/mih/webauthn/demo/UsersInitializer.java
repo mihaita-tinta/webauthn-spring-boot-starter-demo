@@ -4,8 +4,8 @@ import com.mih.webauthn.demo.domain.Account;
 import com.mih.webauthn.demo.domain.AccountRepo;
 import com.mih.webauthn.demo.domain.MyUser;
 import com.mih.webauthn.demo.domain.MyUserRepo;
+import io.github.webauthn.domain.DefaultWebAuthnUser;
 import io.github.webauthn.domain.WebAuthnUserRepository;
-import io.github.webauthn.jpa.JpaWebAuthnUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +43,7 @@ public class UsersInitializer {
 
     private void createWebAuthn(String username) {
 
-        JpaWebAuthnUser newUser = new JpaWebAuthnUser();
+        DefaultWebAuthnUser newUser = new DefaultWebAuthnUser();
         newUser.setUsername(username);
         newUser.setEnabled(true);
         webAuthnUserRepository.save(newUser);
