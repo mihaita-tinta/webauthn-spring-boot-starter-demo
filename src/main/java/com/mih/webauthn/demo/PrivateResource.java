@@ -4,6 +4,8 @@ import io.github.webauthn.domain.WebAuthnCredentials;
 import io.github.webauthn.domain.WebAuthnCredentialsRepository;
 import io.github.webauthn.domain.WebAuthnUser;
 import io.github.webauthn.domain.WebAuthnUserRepository;
+import io.github.webauthn.jpa.JpaWebAuthnCredentials;
+import io.github.webauthn.jpa.JpaWebAuthnUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,9 @@ public class PrivateResource {
     private static final Logger log = LoggerFactory.getLogger(PrivateResource.class);
 
     @Autowired
-    WebAuthnCredentialsRepository credentialsRepository;
+    WebAuthnCredentialsRepository<JpaWebAuthnCredentials> credentialsRepository;
     @Autowired
-    WebAuthnUserRepository userRepository;
+    WebAuthnUserRepository<JpaWebAuthnUser> userRepository;
 
     @PostMapping("/success-password")
     public User successPassword(@AuthenticationPrincipal User user) {

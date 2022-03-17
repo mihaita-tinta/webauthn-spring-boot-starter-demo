@@ -8,6 +8,7 @@ import com.yubico.webauthn.data.UserIdentity;
 import io.github.webauthn.BytesUtil;
 import io.github.webauthn.domain.WebAuthnUser;
 import io.github.webauthn.domain.WebAuthnUserRepository;
+import io.github.webauthn.jpa.JpaWebAuthnUser;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +30,11 @@ class AuthControllerTest {
     //    @MockBean
 //    WebAuthnCredentialsRepository credentialsRepository;
     @Autowired
-    WebAuthnUserRepository appUserRepository;
+    WebAuthnUserRepository<JpaWebAuthnUser> appUserRepository;
 
     @Test
     public void testGetChallenge() {
-        WebAuthnUser user = new WebAuthnUser();
+        JpaWebAuthnUser user = new JpaWebAuthnUser();
         user.setUsername("test");
         appUserRepository.save(user);
 
