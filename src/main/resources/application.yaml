@@ -1,22 +1,21 @@
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE
 spring:
   jackson:
     default-property-inclusion: non_absent
     serialization:
       FAIL_ON_EMPTY_BEANS: false
-  h2:
-    console:
-      enabled: true
   web:
     resources:
-      static-locations: classpath:/META-INF/resources/webauthn
+      static-locations: classpath:/META-INF/resources/webauthn,classpath:/static
 webauthn:
   relying-party-id: localhost
   relying-party-name: Example Application
   relying-party-icon: http://localhost:8080/assets/logo.png
   relying-party-origins: http://localhost:8080
+  registrationNewUsers:
+    enabled: true
   endpoints:
     registrationStartPath: /api/registration/start
     registrationAddPath: /api/registration/add

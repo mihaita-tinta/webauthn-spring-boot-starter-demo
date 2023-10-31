@@ -5,7 +5,6 @@ import com.mih.webauthn.demo.domain.AccountRepo;
 import com.mih.webauthn.demo.domain.MyUser;
 import com.mih.webauthn.demo.domain.MyUserRepo;
 import io.github.webauthn.domain.WebAuthnUserRepository;
-import io.github.webauthn.jpa.JpaWebAuthnUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -21,32 +20,32 @@ public class UsersInitializer {
     AccountRepo accountRepo;
     @Autowired
     MyUserRepo userRepo;
-    @Autowired
-    PasswordEncoder encoder;
-    @Autowired
-    WebAuthnUserRepository webAuthnUserRepository;
+//    @Autowired
+//    PasswordEncoder encoder;
+//    @Autowired
+//    WebAuthnUserRepository webAuthnUserRepository;
 
-    @Bean
-    public CommandLineRunner initUsers() {
-        return args -> {
-            IntStream.range(0, 10)
-                    .forEach(i -> {
-                        MyUser user = new MyUser();
-                        user.setUsername("user-" + i);
-                        user.setPassword(encoder.encode("a"));
-                        userRepo.save(user);
-                        createAccount(user.getUsername());
-                        createWebAuthn(user.getUsername());
-                    });
-        };
-    }
+//    @Bean
+//    public CommandLineRunner initUsers() {
+//        return args -> {
+//            IntStream.range(0, 10)
+//                    .forEach(i -> {
+//                        MyUser user = new MyUser();
+//                        user.setUsername("user-" + i);
+//                        user.setPassword(encoder.encode("a"));
+//                        userRepo.save(user);
+//                        createAccount(user.getUsername());
+//                        createWebAuthn(user.getUsername());
+//                    });
+//        };
+//    }
 
     private void createWebAuthn(String username) {
-
-        JpaWebAuthnUser newUser = new JpaWebAuthnUser();
-        newUser.setUsername(username);
-        newUser.setEnabled(true);
-        webAuthnUserRepository.save(newUser);
+//
+//        JpaWebAuthnUser newUser = new JpaWebAuthnUser();
+//        newUser.setUsername(username);
+//        newUser.setEnabled(true);
+//        webAuthnUserRepository.save(newUser);
     }
 
     private Account createAccount(String username) {
