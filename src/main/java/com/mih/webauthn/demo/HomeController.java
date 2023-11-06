@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,9 +21,10 @@ public class HomeController {
     UserDetailsService userDetailsService;
 
     @GetMapping("/")
-    public Map<String, Object> accounts(@AuthenticationPrincipal UserDetails user) {
-        Iterable<Account> accounts = accountRepo.findAllByUsername(user.getUsername());
-        return Map.of("user", user,
-                "accounts", accounts);
+    public Details accounts(@AuthenticationPrincipal UserDetails user) {
+        var accounts = accountRepo.findAllByUsername(user.getUsername());
+        return new Details(user, accounts);
     }
+
+    public record Details(UserDetails user, List<Account> accounts){}
 }
