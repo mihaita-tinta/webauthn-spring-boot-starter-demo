@@ -38,9 +38,6 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 @EnableWebAuthn
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    MyUserDetailsService userDetailsService;
     @Autowired
     AccountRepo accountRepo;
 
@@ -50,10 +47,9 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                // Spring Security should completely ignore URLs starting with /resources/
-                .requestMatchers("/index.html", "/login.html",
-                        "/h2-console/**",
-                        "/register.html", "/recovery.html", "/node_modules/**", "/error");
+                .requestMatchers("/register.html", "/login.html",
+                        "/h2-console/**", "/error",
+                        "/recovery.html", "/node_modules/**");
     }
 
     @EventListener
