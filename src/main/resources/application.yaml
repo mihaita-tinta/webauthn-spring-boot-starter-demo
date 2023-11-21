@@ -9,6 +9,8 @@ spring:
   h2:
     console:
       enabled: true
+  datasource:
+    url: jdbc:h2:mem:webauthndemodb
   web:
     resources:
       static-locations: classpath:/META-INF/resources/webauthn
